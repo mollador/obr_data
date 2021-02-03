@@ -1,0 +1,141 @@
+
+html, body {
+    margin: 0px;
+    min-height: 100% !important;
+    height: 100%;
+}
+
+h1 {
+    color: rgb(70,126,127);
+    margin: 0;
+}
+
+img {
+    max-width: 100%;
+}
+
+@media screen and (max-width: 300px) {
+    .sizingHeader {
+        font-size: 1rem !important;
+        font-weight: bold;
+    }
+    .mainColumn {
+        padding: 0em !important;
+    }
+}
+
+@media (min-width: 300px) and (max-width: 600px) {
+    .sizingHeader {
+        font-size: 1.5rem !important;
+        font-weight: bold;
+    }
+    .mainColumn {
+        padding: 0em !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 800px) {
+    .sizingHeader {
+        font-size: 2rem !important;
+        font-weight: bold;
+    }
+    .mainColumn {
+        padding: 1em !important;
+    }
+}
+
+.heightFix {
+    min-height: 100% !important;
+    height: 100%;
+}
+
+.list-group-item.active {
+    background-color: rgb(70,126,127) !important;
+    border-color: rgb(70,126,127) !important;
+}
+
+.background {
+    background-image: url('../images/background.jpg');
+    background-repeat: repeat;
+    min-height: 100% !important;
+}
+
+
+.col-center-block {
+    width: 100%;
+    float: none;
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.LRzeroPadding {
+    padding-right: 0em;
+}
+
+.buttonMenuMargin {
+    margin-right: 1em;
+    margin-left: 1em;
+}
+
+.btn-tean {
+    color: #fff;
+    background-color: rgb(70,126,127);
+    border-color: rgb(70,126,127);
+    font-weight: 200;
+}
+
+.btn-margin {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.btn-search {
+    padding: 0px;
+    margin: 0px;
+    z-index: 100;
+}
+
+.btn-search:hover {
+    background-color: rgb(177, 180, 184);
+}
+
+.mainColumn {
+    background-color: white;
+    padding: 3em;
+    
+}
+
+.container {
+    margin-top: 2em;
+}
+
+.margin-top {
+    margin-top: 2em;
+}
+
+
+#mainArticle {
+    grid-area: article;
+}
+
+.listBlock {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.nav-link {
+    font-size: 1.1rem;
+}
+
+.inputWidth {
+    width: 170% !important;
+}
+
+
+
+.my-table { 
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+}

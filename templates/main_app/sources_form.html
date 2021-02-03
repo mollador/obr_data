@@ -1,0 +1,20 @@
+{% extends 'main_app/base.html' %} 
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block content %}
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        <div class="wrapper fadeInDown">
+            <div id="formContent">
+              <form>
+                <h1 class="display-4 centralizeHeader">Новый источник</h1>
+                <input type="text" id="url" class="fadeIn second" name="url" placeholder="URL" required>
+                <input type="submit" class="fadeIn fourth" value="Добавить">
+              </form>
+            </div>
+          </div>
+    </form>
+
+{% endblock %}

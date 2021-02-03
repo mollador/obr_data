@@ -1,0 +1,35 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block content %}
+    {% if form.errors %}
+    <div class="jumbotron">
+        <h1 class="display-4 sizingHeader">Ошибка! Попробуйте ещё раз</h1>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+        <div class="wrapper fadeInDown">
+          <div id="formContent">
+            <!-- Login Form -->
+            <form>
+              <input type="text" id="login" class="fadeIn second" name="username" placeholder="Логин">
+              <input type="password" id="password" class="fadeIn second" name="password" placeholder="Пароль">
+              <input type="submit" class="fadeIn fourth" value="Войти">
+            </form>
+        
+            <!-- Remind Passowrd -->
+            <div id="formFooter">
+              <a class="underlineHover" href="#">Забыли пароль?</a>
+            </div>
+        
+          </div>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+
+  
+{% endblock %}

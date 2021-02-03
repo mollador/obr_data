@@ -1,0 +1,23 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+<div class="container">
+    <ul class="list-group">
+
+        <li class="list-group-item list-group-item-success"> Активные </li>
+        {% for source in sources_list %}
+            {% if source.is_approved %}
+                <li class="list-group-item"><span data-toggle="tooltip" data-placement="right" title="{{source.description}}">{{ source.url }}</span></li>
+            {% endif %}
+        {% endfor %}
+
+        <li class="list-group-item list-group-item-dark"> На рассмотрении </li>
+        {% for source in sources_list %}
+            {% if not source.is_approved %}
+                <li class="list-group-item"><span data-toggle="tooltip" data-placement="right" title="{{source.description}}">{{ source.url }}</span></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+</div>
+{% endblock %}

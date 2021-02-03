@@ -1,0 +1,224 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+
+{% comment %} <div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4 sizingHeader">Агрегатор открытых данных по образовательным учреждениям</h1>
+        <p class="lead">С помощью этого инструмента вы сможете найти любые интересующие вас официальные документы</p>
+        <hr class="my-4">
+        <p>Прочтите краткую инструкцию для использования агрегатора</p>
+        <p class="lead">
+            <a class="btn btn-tean btn-lg btn-margin" href="#" role="button">Learn more</a>
+            <a class="btn btn-tean btn-lg" href="#" role="button">Skip</a>
+        </p>
+    </div>
+</div> {% endcomment %}
+<div class="container">
+  <h1 class="display-4 sizingHeader">{{ context_data }}</h1>
+</div>
+<div class="container">
+    <form action="{% url 'search'%}" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" class="form-control" id="validationTooltipUsername" aria-describedby="validationTooltipUsernamePrepend" name="search" value="{{ search_query }}">
+            <button class="input-group-btn input-group-append " type="submit">
+                <span >
+                    <img src="{% static 'images/loupe.svg' %}" alt="Find" style="width: 2em; height: 1em;">
+                 </span>
+            </button>
+            
+        </div>
+    </form>
+</div>
+
+<div class="container">
+  <h1 class="display-4 sizingHeader">Источник</h1>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="list-group" id="list-tab" role="tablist">
+            {% for item in source_list %}
+                {% if forloop.first %}                       
+                    <a class="list-group-item list-group-item-action active" id="{{ item.id }}-list" data-toggle="list" href="#{{ item.id }}" role="tab" aria-controls="home">{{ item.source }}</a>
+                {% else %}
+                    <a class="list-group-item list-group-item-action" id="{{ item.id }}-list" data-toggle="list" href="#{{ item.id }}" role="tab" aria-controls="home">{{ item.source }}</a>
+                {% endif %}    
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+  <h1 class="display-4 sizingHeader">Документы</h1>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="tab-content" id="nav-tabContent">
+            {% for item in source_list %}
+                {% if forloop.first %}                       
+                        <div class="tab-pane fade show active" id="{{ item.id }}" role="tabpanel" aria-labelledby="{{ item.id }}-list">
+                    {% else %}
+                        <div class="tab-pane fade" id="{{ item.id }}" role="tabpanel" aria-labelledby="{{ item.id }}-list">
+                    {% endif %}  
+                        {% for doc in item.document_list %}
+                            {% if forloop.first %}                       
+                                <a class="list-group-item list-group-item-action" id="{{ item.source }}" data-toggle="list"  role="tab" arie-labelledby="{{ item.source }}-list">
+                                    {{ doc.Caption }}
+                                    <p onclick="
+                                    load_data_detail(
+                                    '{{ item.source }}',
+                                    '{{ doc.Id }}',
+                                    'description_{{ item.source }}_{{ forloop.counter }}', 
+                                    'department_{{ item.source }}_{{ forloop.counter }}', 
+                                    'keywords_{{ item.source }}_{{ forloop.counter }}', 
+                                    'url_{{ item.source }}_{{ forloop.counter }}')" class="" data-toggle="collapse" data-target="#collapse_{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseOne" id="headingOne">
+                                        Развернуть
+                                    </p>
+                            {% else %}
+                                <a class="list-group-item list-group-item-action" id="{{ item.source }}" data-toggle="list"  role="tab" arie-labelledby="{{ item.source }}-list">
+                                    {{ doc.Caption }}
+                                    <p onclick="
+                                    load_data_detail(
+                                    '{{ item.source }}',
+                                    '{{ doc.Id }}',
+                                    'description_{{ item.source }}_{{ forloop.counter }}', 
+                                    'department_{{ item.source }}_{{ forloop.counter }}', 
+                                    'keywords_{{ item.source }}_{{ forloop.counter }}', 
+                                    'url_{{ item.source }}_{{ forloop.counter }}')" class="" data-toggle="collapse" data-target="#collapse_{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseOne" id="headingOne">
+                                        Развернуть
+                                    </p>
+                            {% endif %}
+                            </a>
+
+                            <div id="collapse_{{ forloop.counter }}" class="collapse" aria-labelledby="headingOne" data-parent="#list-tab-1">
+
+                                <h6 class="card-body">Департамент</h6>
+                                <div class="card-body" id="department_{{ item.source }}_{{ forloop.counter }}">Загрузка .....</div>
+
+
+                                <h6 class="card-body">Описание</h6>
+                                <div class="card-body" id="description_{{ item.source }}_{{ forloop.counter }}">Загрузка ..... </div>
+                                
+                                <h6 class="card-body">Ключевые слова</h6>
+                                <div class="card-body" id="keywords_{{ item.source }}_{{ forloop.counter }}">Загрузка ..... </div>
+
+                                <div class="container">
+                                    <button 
+                                        id="preview_{{ forloop.counter }}_button"
+                                        class="btn btn-dark"
+                                        onclick="
+                                        load_preview('{{ item.source }}','{{ doc.Id }}','preview_{{ item.source }}_{{ doc.Id }}');
+                                        del_button('preview_{{ forloop.counter }}_button')">
+                                        Превью
+                                    </button>
+                                    <a class="btn btn-dark" id="url_{{ item.source }}_{{ forloop.counter }}"  href="{% url 'download' id=doc.Id %}" download>
+                                        Загрузка .....
+                                    </a>
+                                </div>
+
+                                <div class="container" id="preview_{{ item.source }}_{{ doc.Id }}">
+                                
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-12 col-md-4 col-lg-4 listBlock">
+            <div class="list-group" id="list-tab" role="tablist">
+                {% for item in source_list %}
+                    {% if forloop.first %}                       
+                    <a class="list-group-item list-group-item-action active" id="{{ item.id }}-list" data-toggle="list" href="#{{ item.id }}" role="tab" aria-controls="home">{{ item.source }}</a>
+                    {% else %}
+                    <a class="list-group-item list-group-item-action" id="{{ item.id }}-list" data-toggle="list" href="#{{ item.id }}" role="tab" aria-controls="home">{{ item.source }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8 listBlock">
+            <div class="tab-content" id="nav-tabContent">
+                {% for item in source_list %}
+                    {% if forloop.first %} 
+
+                    <div class="tab-pane fade show active" id="{{ item.id }}" role="tabpanel" aria-labelledby="{{ item.id }}-list">{{ item.document_list }}</div>
+                    {% else %}
+                    <div class="tab-pane fade" id="{{ item.id }}" role="tabpanel" aria-labelledby="{{ item.id }}-list">{{ item.document_list }}</div>
+                    {% endif %}
+
+                        <div class="list-group" id="list-tab-1" role="tablist">
+                            {% for doc in item.document_list %}
+                                {% if forloop.first %}                       
+                                <a class="list-group-item list-group-item-action  active" id="{{ item.source }}" data-toggle="list" href="#list-home" role="tab" arie-labelledby="{{ item.source }}-list">
+                                    {{ doc.Caption }}
+                                    <p class="" data-toggle="collapse" data-target="#collapse_{{ forloop.counter }}" aria-expanded="false" id="headingOne">
+                                        Развернуть
+                                    </p>
+                                </a>
+                                <div id="collapse_{{ forloop.counter }}" class="collapse" aria-labelledby="headingOne" data-parent="#list-tab-1">
+                                    <h6 class="card-body">Дата публикации</h6>
+                                    <div class="card-body"> {{ doc.PublishDate }} </div>
+                                    <h6 class="card-body">Дата обовления</h6>
+
+                                    <p class="test" id="test">Тест JSON</p>
+                                    <button onclick="loadJSON({{ doc.Id }}, 'test')">Get JSON data</button>
+                                </div>
+
+
+                                {% else %}
+                                <a class="list-group-item list-group-item-action" id="{{ item.source }}" data-toggle="list" href="#list-home" role="tab" arie-labelledby="{{ item.source }}-list">
+                                    {{ doc.Caption }}
+                                    <p class="" data-toggle="collapse" data-target="#collapse_{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseOne" id="headingOne">
+                                        Развернуть
+                                    </p>
+                                </a>
+                                 <div id="collapse_{{ forloop.counter }}" class="collapse" aria-labelledby="headingOne" data-parent="#list-tab-1">
+                                    <h6 class="card-body">Дата публикации</h6>
+                                    <div class="card-body"> {{ doc.PublishDate }} </div>
+                                    <h6 class="card-body">Дата обовления</h6>
+                                    <div class="card-body"> {{ doc.LastUpdateDate }} </div>
+                                    <h6 class="card-body">Ключевые слова</h6>
+                                    <div class="card-body"> {{ doc.Keywords}} </div>
+                                    <h6 class="card-body">Описание</h6>
+                                    <div class="card-body"> {{ doc.FullDescription}} </div>
+
+
+                                    <p class="test" id="test">Тест JSON</p>
+                                    <button onclick="loadJSON({{ doc.Id }}, 'test')">Get JSON data</button>
+                                </div>
+                                {% endif %}
+                    
+        
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="container">
+  <div class="jumbotron" data-toggle="list" href="#list-home" role="tab">
+      <h1 class="display-4 sizingHeader">Здесь будет заголовок превью документа</h1>
+      <p class="lead">Под чертой первые несколько строчек</p>
+      <hr class="my-4">
+      <p>.................. ....................... ....................... ........................... .............. .........................</p>
+  </div>
+</div>
+
+
+{% endblock %}

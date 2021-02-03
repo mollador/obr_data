@@ -1,0 +1,28 @@
+{% extends 'main_app/base.html' %} 
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block content %}
+
+{% if registered %}
+    <h1 class="display-4 centralizeHeader">Спасибо за регистрцию!</h1> 
+    {% else %}
+    <h1 class="display-4 centralizeHeader">Заполните все поля</h1>
+<form class="container" enctype="multipart/form-data" method="POST" action='{% url "register" %}'>
+    {% csrf_token %}
+        <div class="wrapper fadeInDown">
+          <div id="formContent">
+            <!-- Login Form -->
+            <form>
+              <input type="text" id="login" class="fadeIn second" name="username" placeholder="Логин" required>
+              <input type="text" id="email" class="fadeIn second" name="email" placeholder="Email" required>
+              <input type="password" id="password" class="fadeIn second" name="password" placeholder="Пароль" required>
+              <input type="submit" class="fadeIn fourth" value="Зарегестрироваться">
+            </form>
+          </div>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+    {% endif %}
+{% endblock %}
